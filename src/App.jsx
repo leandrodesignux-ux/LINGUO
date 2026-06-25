@@ -1387,10 +1387,10 @@ export default function App() {
                 >
                   {lastFeedback.type === 'reveal-correct' && `✓ +${lastFeedback.earned} pts${streak > 1 ? ` (×${(Math.min(1 + (streak - 1) * 0.5, 5)).toFixed(1)} streak)` : ''}`}
                   {lastFeedback.type === 'solve-correct' && '✓ Solved! +500 bonus pts'}
-                  {lastFeedback.type === 'solve-wrong' && '✗ Wrong guess — −2 moves'}
+                  {lastFeedback.type === 'solve-wrong' && '✗ Wrong guess — streak reset'}
                   {lastFeedback.type === 'hint-used' && '💡 Lex revealed a letter!'}
                   {lastFeedback.type === 'decoy-wrong' && `✗ Decoy! Strike ${lastFeedback.strikes ?? strikes}/${MAX_STRIKES} — streak reset`}
-                  {lastFeedback.type === 'reroll' && '↺ Level skipped — −3 moves'}
+                  {lastFeedback.type === 'reroll' && '↺ Level skipped'}
                   {lastFeedback.type === 'time-up' && '⏱ Time’s up! Chest capped at Bronze — keep going!'}
                   {lastFeedback.type === 'moves-added' && `+${lastFeedback.amount} moves added — keep going!`}
                 </motion.div>
