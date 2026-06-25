@@ -311,27 +311,29 @@ function gameReducer(state, action) {
     }
 
     case A.ROTATE_DECOYS: {
-      // Swap one random decoy with one random empty-decorative cell.
-      // Never touches revealed cells or real-letter cells.
       const flat = state.grid.flat()
-      const decoys     = flat.filter((c) => c.isDecoy && !c.revealed)
-      const decorative = flat.filter((c) => c.phraseIndex === null && !c.isDecoy && !c.revealed)
-      if (decoys.length === 0 || decorative.length === 0) return state
+      const decoys = flat.filter((c) => c.isDecoy && !c.revealed)
+      if (decoys.length < 2) return state
 
-      // Use action.seed for determinism (caller passes Date.now())
+      // Pick two different decoy cells using seeded LCG
       const s0 = (action.seed >>> 0)
       const s1 = (Math.imul(1664525, s0) + 1013904223) >>> 0
       const s2 = (Math.imul(1664525, s1) + 1013904223) >>> 0
-      const decoyCell = decoys[s1 % decoys.length]
-      const emptyCell = decorative[s2 % decorative.length]
+      const idxA = s1 % decoys.length
+      let idxB = s2 % decoys.length
+      if (idxB === idxA) idxB = (idxA + 1) % decoys.length
 
+      const cellA = decoys[idxA]
+      const cellB = decoys[idxB]
+
+      // Swap the letter/decoyChar between the two cells, keep everything else (color, position, id)
       const newGrid = state.grid.map((row) =>
         row.map((cell) => {
-          if (cell.id === decoyCell.id) {
-            return { ...cell, isDecoy: false, letter: null, decoyChar: null }
+          if (cell.id === cellA.id) {
+            return { ...cell, letter: cellB.letter, decoyChar: cellB.decoyChar }
           }
-          if (cell.id === emptyCell.id) {
-            return { ...cell, isDecoy: true, letter: decoyCell.decoyChar, decoyChar: decoyCell.decoyChar, color: COLORS.filter((c) => c !== state.activeColor)[0] }
+          if (cell.id === cellB.id) {
+            return { ...cell, letter: cellA.letter, decoyChar: cellA.decoyChar }
           }
           return cell
         })
