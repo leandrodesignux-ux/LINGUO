@@ -102,11 +102,6 @@ const CellTile = memo(function CellTile({ cell, isExploding, isShaking, isDecoyF
   const txtClr  = revealed ? '#333' : isDecoyFailed ? '#ff9090' : PLATE_TEXT[color]      ?? '#C4B8FF'
   const shadow  = revealed ? 'none' : isDecoyFailed ? '0 0 0 2px rgba(220,60,60,0.5)' : PLATE_SHADOW[color] ?? '0 4px 12px rgba(100,80,255,0.2)'
 
-  // Active tiles get a stronger static glow — no animation to avoid flash
-  const activeShadow = isActiveColor
-    ? `${shadow}, 0 0 0 2px ${PLATE_BORDER[color] ?? 'rgba(162,147,255,0.4)'}, 0 0 10px 2px ${PLATE_BORDER[color] ?? 'rgba(162,147,255,0.2)'}`
-    : shadow
-
   return (
     <motion.div
       ref={cellRef}
@@ -130,7 +125,9 @@ const CellTile = memo(function CellTile({ cell, isExploding, isShaking, isDecoyF
       style={{
         background: bg,
         border: isActiveColor ? `2.5px solid ${PLATE_BORDER[color] ?? 'rgba(162,147,255,0.4)'}` : `1.5px solid ${border}`,
-        boxShadow: activeShadow,
+        boxShadow: isActiveColor
+          ? `${shadow}, 0 0 0 2.5px ${PLATE_BORDER[color] ?? 'rgba(162,147,255,0.4)'}`
+          : shadow,
         transformOrigin: 'center',
       }}
       role="gridcell"

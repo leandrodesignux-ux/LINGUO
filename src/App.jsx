@@ -314,27 +314,18 @@ function gameReducer(state, action) {
       const flat = state.grid.flat()
       const decoys = flat.filter((c) => c.isDecoy && !c.revealed)
       if (decoys.length < 2) return state
-
-      // Pick two different decoy cells using seeded LCG
       const s0 = (action.seed >>> 0)
       const s1 = (Math.imul(1664525, s0) + 1013904223) >>> 0
       const s2 = (Math.imul(1664525, s1) + 1013904223) >>> 0
       const idxA = s1 % decoys.length
       let idxB = s2 % decoys.length
       if (idxB === idxA) idxB = (idxA + 1) % decoys.length
-
       const cellA = decoys[idxA]
       const cellB = decoys[idxB]
-
-      // Swap the letter/decoyChar between the two cells, keep everything else (color, position, id)
       const newGrid = state.grid.map((row) =>
         row.map((cell) => {
-          if (cell.id === cellA.id) {
-            return { ...cell, letter: cellB.letter, decoyChar: cellB.decoyChar }
-          }
-          if (cell.id === cellB.id) {
-            return { ...cell, letter: cellA.letter, decoyChar: cellA.decoyChar }
-          }
+          if (cell.id === cellA.id) return { ...cell, letter: cellB.letter, decoyChar: cellB.decoyChar }
+          if (cell.id === cellB.id) return { ...cell, letter: cellA.letter, decoyChar: cellA.decoyChar }
           return cell
         })
       )
