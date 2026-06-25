@@ -2,6 +2,9 @@ import { useRef, useState, useCallback, useEffect, memo } from 'react'
 import { motion } from 'framer-motion'
 import { playChain, playWrong } from '../audio/sfx.js'
 
+const COLOR_HEX   = { gold: '#FFDA57', cyan: '#7DCAF6', lime: '#34D9B3', pink: '#FFBBF4', purple: '#C4B8FF' }
+const COLOR_LABEL = { gold: 'Gold',    cyan: 'Blue',    lime: 'Green',   pink: 'Pink',    purple: 'Purple'  }
+
 // ── Plate palette — solid tile backgrounds ──────────────────────────────────
 const PLATE_BG = {
   pink:   '#2a1a2e',

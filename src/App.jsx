@@ -1384,6 +1384,34 @@ export default function App() {
               )}
             </AnimatePresence>
 
+            {/* ── Active color instruction ── */}
+            {!levelComplete && !isGameOver && activeColor && (
+              <div className="w-full flex items-center justify-center gap-2 mb-2">
+                <div
+                  style={{
+                    width: 12, height: 12, borderRadius: '50%',
+                    background: { gold: '#FFDA57', cyan: '#7DCAF6', lime: '#34D9B3', pink: '#FFBBF4', purple: '#C4B8FF' }[activeColor],
+                    boxShadow: `0 0 6px 2px ${{ gold: '#FFDA5755', cyan: '#7DCAF655', lime: '#34D9B355', pink: '#FFBBF455', purple: '#C4B8FF55' }[activeColor]}`,
+                    flexShrink: 0,
+                  }}
+                />
+                <span
+                  className="text-xs font-black uppercase tracking-widest"
+                  style={{ color: { gold: '#FFDA57', cyan: '#7DCAF6', lime: '#34D9B3', pink: '#FFBBF4', purple: '#C4B8FF' }[activeColor] }}
+                >
+                  Tap {({ gold: 'Gold', cyan: 'Blue', lime: 'Green', pink: 'Pink', purple: 'Purple' })[activeColor]} tiles
+                </span>
+                <div
+                  style={{
+                    width: 12, height: 12, borderRadius: '50%',
+                    background: { gold: '#FFDA57', cyan: '#7DCAF6', lime: '#34D9B3', pink: '#FFBBF4', purple: '#C4B8FF' }[activeColor],
+                    boxShadow: `0 0 6px 2px ${{ gold: '#FFDA5755', cyan: '#7DCAF655', lime: '#34D9B355', pink: '#FFBBF455', purple: '#C4B8FF55' }[activeColor]}`,
+                    flexShrink: 0,
+                  }}
+                />
+              </div>
+            )}
+
             {/* ── Grid ── */}
             <GameGrid
               grid={grid}
