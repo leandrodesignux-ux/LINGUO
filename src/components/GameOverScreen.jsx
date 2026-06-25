@@ -58,6 +58,7 @@ export default function GameOverScreen({
   extraMovesCost,
   onBuyMoves,
   onSurrender,
+  lostByStrikes,
 }) {
   const canAfford = coins >= extraMovesCost
   const missing   = extraMovesCost - coins
@@ -143,46 +144,48 @@ export default function GameOverScreen({
       </AnimatePresence>
 
       {/* ── Primary CTA: Buy +5 moves ── */}
-      <motion.div
-        className="flex flex-col items-center gap-2 w-full max-w-xs"
-        initial={{ opacity: 0, y: 10 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.28 }}
-      >
-        <motion.button
-          onClick={canAfford ? onBuyMoves : undefined}
-          disabled={!canAfford}
-          className={`
-            w-full py-4 rounded-2xl font-black text-base tracking-wide
-            shadow-xl transition-all duration-150 focus:outline-none
-            ${canAfford
-              ? 'bg-gradient-to-r from-linguo-blossomPink to-linguo-brightLavender text-linguo-smokyBlack shadow-linguo-brightLavender/30 cursor-pointer'
-              : 'bg-white/8 border border-white/15 text-linguo-fantasy/35 cursor-not-allowed shadow-none'}
-          `}
-          whileHover={canAfford ? { scale: 1.04, filter: 'brightness(1.08)' } : {}}
-          whileTap={canAfford ? { scale: 0.96 } : {}}
+      {!lostByStrikes && (
+        <motion.div
+          className="flex flex-col items-center gap-2 w-full max-w-xs"
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.28 }}
         >
-          <span className="flex items-center justify-center gap-2">
-            <span>+5 Moves</span>
-            <span className="flex items-center gap-0.5 text-sm font-bold opacity-80">
-              <span>🪙</span>
-              <span>{extraMovesCost}</span>
+          <motion.button
+            onClick={canAfford ? onBuyMoves : undefined}
+            disabled={!canAfford}
+            className={`
+              w-full py-4 rounded-2xl font-black text-base tracking-wide
+              shadow-xl transition-all duration-150 focus:outline-none
+              ${canAfford
+                ? 'bg-gradient-to-r from-linguo-blossomPink to-linguo-brightLavender text-linguo-smokyBlack shadow-linguo-brightLavender/30 cursor-pointer'
+                : 'bg-white/8 border border-white/15 text-linguo-fantasy/35 cursor-not-allowed shadow-none'}
+            `}
+            whileHover={canAfford ? { scale: 1.04, filter: 'brightness(1.08)' } : {}}
+            whileTap={canAfford ? { scale: 0.96 } : {}}
+          >
+            <span className="flex items-center justify-center gap-2">
+              <span>+5 Moves</span>
+              <span className="flex items-center gap-0.5 text-sm font-bold opacity-80">
+                <span>🪙</span>
+                <span>{extraMovesCost}</span>
+              </span>
             </span>
-          </span>
-        </motion.button>
+          </motion.button>
 
-        {/* Coin balance feedback */}
-        {canAfford ? (
-          <p className="text-linguo-fantasy/35 text-xs">
-            Balance: <span className="text-linguo-lightGold font-bold">🪙 {coins}</span>
-            {' '}→ <span className="font-bold">🪙 {coins - extraMovesCost}</span>
-          </p>
-        ) : (
-          <p className="text-linguo-fantasy/40 text-xs">
-            Need <span className="text-linguo-lightCoral font-bold">🪙 {missing} more</span> — earn lingots by completing levels
-          </p>
-        )}
-      </motion.div>
+          {/* Coin balance feedback */}
+          {canAfford ? (
+            <p className="text-linguo-fantasy/35 text-xs">
+              Balance: <span className="text-linguo-lightGold font-bold">🪙 {coins}</span>
+              {' '}→ <span className="font-bold">🪙 {coins - extraMovesCost}</span>
+            </p>
+          ) : (
+            <p className="text-linguo-fantasy/40 text-xs">
+              Need <span className="text-linguo-lightCoral font-bold">🪙 {missing} more</span> — earn lingots by completing levels
+            </p>
+          )}
+        </motion.div>
+      )}
 
       {/* ── Separator ── */}
       <div className="w-full max-w-xs flex items-center gap-3">
@@ -190,6 +193,13 @@ export default function GameOverScreen({
         <span className="text-linguo-fantasy/25 text-[10px] uppercase tracking-widest">or</span>
         <div className="flex-1 h-px bg-white/8" />
       </div>
+
+      {lostByStrikes && (
+        <div className="w-full text-center px-4 py-3 rounded-xl bg-linguo-lightCoral/10 border border-linguo-lightCoral/25">
+          <p className="text-linguo-lightCoral font-bold text-sm">Too many wrong taps</p>
+          <p className="text-linguo-fantasy/50 text-xs mt-1">3 strikes — level failed</p>
+        </div>
+      )}
 
       {/* ── Secondary: Surrender ── */}
       <motion.div

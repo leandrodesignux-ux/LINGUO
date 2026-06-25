@@ -1345,6 +1345,7 @@ export default function App() {
             extraMovesCost={EXTRA_MOVES_COST}
             onBuyMoves={handleBuyMoves}
             onSurrender={handleSurrender}
+            lostByStrikes={strikes >= MAX_STRIKES}
           />
 
         ) : (
