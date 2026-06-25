@@ -3,13 +3,13 @@ import { motion, AnimatePresence } from 'framer-motion'
 
 // ─── LetterTile ───────────────────────────────────────────────────────────────
 
-function LetterTile({ slot }) {
+function LetterTile({ slot, tileSize, textSize }) {
   return (
     <div className="flex flex-col items-center">
       <div
         className={`
           relative flex items-center justify-center
-          w-7 h-9 sm:w-8 sm:h-10 rounded-md
+          ${tileSize} rounded-md
           border transition-colors duration-300
           ${slot.revealed
             ? slot.fromHint
@@ -22,7 +22,7 @@ function LetterTile({ slot }) {
           {slot.revealed && (
             <motion.span
               key="letter"
-              className="font-bold text-linguo-fantasy text-sm sm:text-base leading-none select-none"
+              className={`font-bold text-linguo-fantasy ${textSize} leading-none select-none`}
               style={{ display: 'inline-block', fontFamily: "'Space Grotesk', sans-serif" }}
               initial={{ scale: 0, rotateY: 90, opacity: 0 }}
               animate={{ scale: 1, rotateY: 0, opacity: 1 }}
@@ -103,6 +103,22 @@ export default function PhraseBoard({ hiddenPhrase, onSolveAttempt, levelComplet
     return words
   }
 
+  const letterCount = hiddenPhrase.slots.filter(s => s.char !== ' ').length
+  let tileSize, textSize
+  if (letterCount <= 10) {
+    tileSize = 'w-8 h-10 sm:w-9 sm:h-11'
+    textSize = 'text-base sm:text-lg'
+  } else if (letterCount <= 16) {
+    tileSize = 'w-7 h-9 sm:w-8 sm:h-10'
+    textSize = 'text-sm sm:text-base'
+  } else if (letterCount <= 24) {
+    tileSize = 'w-6 h-8 sm:w-7 sm:h-9'
+    textSize = 'text-xs sm:text-sm'
+  } else {
+    tileSize = 'w-5 h-7 sm:w-6 sm:h-8'
+    textSize = 'text-[10px] sm:text-xs'
+  }
+
   return (
     <div className="w-full max-w-lg mt-5">
       {/* ── Letter tiles ── */}
@@ -110,7 +126,7 @@ export default function PhraseBoard({ hiddenPhrase, onSolveAttempt, levelComplet
         {groupSlotsByWord(hiddenPhrase.slots).map((wordSlots, wi) => (
           <div key={wi} className="inline-flex flex-row gap-x-1 flex-shrink-0">
             {wordSlots.map((slot) => (
-              <LetterTile key={slot.index} slot={slot} />
+              <LetterTile key={slot.index} slot={slot} tileSize={tileSize} textSize={textSize} />
             ))}
           </div>
         ))}
