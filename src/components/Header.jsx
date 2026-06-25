@@ -52,8 +52,8 @@ function IconBtn({ onClick, title, ariaLabel, ariaPressed, children, active = fa
       aria-label={ariaLabel ?? title}
       aria-pressed={ariaPressed}
       className={[
-        'flex-shrink-0 w-7 h-7 rounded-full flex items-center justify-center',
-        'text-[13px] border transition-colors duration-150',
+        'flex-shrink-0 w-6 h-6 rounded-full flex items-center justify-center',
+        'text-[12px] border transition-colors duration-150',
         'focus:outline-none focus:ring-2 focus:ring-white/30',
         active  ? 'bg-linguo-teal/20 border-linguo-teal/50 text-linguo-teal'
                 : danger
@@ -74,8 +74,8 @@ function NavBtn({ onClick, title, active, accentOn, accentOff, badge, icon, labe
       title={title}
       aria-pressed={active}
       className={[
-        'relative flex-shrink-0 flex items-center gap-1 px-2 py-1 rounded-full',
-        'text-[10px] font-black uppercase tracking-wider border',
+        'relative flex-shrink-0 flex items-center gap-1 px-1.5 py-0.5 rounded-full',
+        'text-[9px] font-black uppercase tracking-wider border',
         'transition-colors duration-150 focus:outline-none focus:ring-2 focus:ring-white/20',
         active ? accentOn : accentOff,
       ].join(' ')}
@@ -340,7 +340,7 @@ export default function Header({
     <header className="fixed top-0 left-0 right-0 z-40 bg-linguo-smokyBlack border-b border-white/8 select-none">
 
       {/* ── Row 1: Nav | Resources ── */}
-      <div className="px-3 sm:px-4 h-12 flex items-center gap-2">
+      <div className="px-3 sm:px-4 h-11 flex items-center gap-2">
 
         {/* ──── LEFT ZONE ──────────────────────────────────────────────────── */}
         <div className="flex items-center gap-1.5 flex-shrink-0">
@@ -462,7 +462,7 @@ export default function Header({
       </div>
 
       {/* ── Row 2: Level progress bar ── */}
-      <div className="px-3 sm:px-4 pb-1.5 flex items-center gap-2">
+      <div className="px-3 sm:px-4 pb-1 flex items-center gap-2">
         <span className="flex-shrink-0 text-[9px] font-black uppercase tracking-widest text-linguo-fantasy/35 whitespace-nowrap">
           Lv {level}<span className="text-linguo-fantasy/20">/{totalLevels}</span>
         </span>
