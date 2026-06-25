@@ -92,15 +92,6 @@ function GemParticles({ bursts }) {
 // ─── CellTile ─────────────────────────────────────────────────────────────────
 // Solid rounded plate — no clip-path, no absolute shape div, no inert state.
 
-// Raw rgba values for the pulse glow — keyed by color name
-const PULSE_GLOW = {
-  pink:   ['rgba(255,150,230,0)', 'rgba(255,150,230,0.30)'],
-  purple: ['rgba(162,147,255,0)', 'rgba(162,147,255,0.35)'],
-  gold:   ['rgba(255,218,87,0)',  'rgba(255,218,87,0.30)'],
-  cyan:   ['rgba(125,202,246,0)', 'rgba(125,202,246,0.30)'],
-  lime:   ['rgba(0,145,122,0)',   'rgba(0,145,122,0.35)'],
-}
-
 const CellTile = memo(function CellTile({ cell, isExploding, isShaking, isDecoyFailed, isActiveColor, cellRef, ariaLabel }) {
   const { revealed, color } = cell
   const displayChar = revealed ? null : (cell.letter ?? cell.decoyChar ?? null)
@@ -111,22 +102,10 @@ const CellTile = memo(function CellTile({ cell, isExploding, isShaking, isDecoyF
   const txtClr  = revealed ? '#333' : isDecoyFailed ? '#ff9090' : PLATE_TEXT[color]      ?? '#C4B8FF'
   const shadow  = revealed ? 'none' : isDecoyFailed ? '0 0 0 2px rgba(220,60,60,0.5)' : PLATE_SHADOW[color] ?? '0 4px 12px rgba(100,80,255,0.2)'
 
-  // Pulse glow shadow for active-letter tiles
-  const [dim, bright] = PULSE_GLOW[color] ?? PULSE_GLOW.purple
-  const pulseBoxShadow = isActiveColor
-    ? [`${shadow}, 0 0 0 0px ${dim}`, `${shadow}, 0 0 0 3px ${bright}`, `${shadow}, 0 0 0 0px ${dim}`]
+  // Active tiles get a stronger static glow — no animation to avoid flash
+  const activeShadow = isActiveColor
+    ? `${shadow}, 0 0 0 2px ${PLATE_BORDER[color] ?? 'rgba(162,147,255,0.4)'}, 0 0 10px 2px ${PLATE_BORDER[color] ?? 'rgba(162,147,255,0.2)'}`
     : shadow
-  const pulseTransition = isActiveColor
-    ? { duration: 2, repeat: Infinity, ease: 'easeInOut', repeatType: 'loop' }
-    : { duration: 0 }
-
-  // Explode keyframes (replaces variants pattern so we can merge with animate object)
-  const explodeAnimate = isExploding
-    ? { scale: [1, 1.45, 1.1, 0], opacity: [1, 1, 0.7, 0] }
-    : { scale: 1, opacity: 1 }
-  const explodeTransition = isExploding
-    ? { duration: 0.44, times: [0, 0.35, 0.6, 1], ease: 'easeOut' }
-    : undefined
 
   return (
     <motion.div
@@ -138,13 +117,20 @@ const CellTile = memo(function CellTile({ cell, isExploding, isShaking, isDecoyF
         revealed ? 'opacity-30 cursor-default pointer-events-none' : '',
         isShaking ? 'tile-shake' : '',
       ].join(' ')}
-      animate={{ ...explodeAnimate, boxShadow: pulseBoxShadow }}
-      transition={explodeTransition ?? pulseTransition}
+      animate={isExploding
+        ? { scale: [1, 1.45, 1.1, 0], opacity: [1, 1, 0.7, 0] }
+        : { scale: 1, opacity: 1 }
+      }
+      transition={isExploding
+        ? { duration: 0.44, times: [0, 0.35, 0.6, 1], ease: 'easeOut' }
+        : { duration: 0.15 }
+      }
       whileHover={tappable ? { scale: 1.07, transition: { duration: 0.12 } } : {}}
       whileTap={tappable   ? { scale: 0.91, transition: { duration: 0.08 } } : {}}
       style={{
         background: bg,
-        border: isActiveColor ? `2.5px solid ${border}` : `1.5px solid ${border}`,
+        border: isActiveColor ? `2.5px solid ${PLATE_BORDER[color] ?? 'rgba(162,147,255,0.4)'}` : `1.5px solid ${border}`,
+        boxShadow: activeShadow,
         transformOrigin: 'center',
       }}
       role="gridcell"

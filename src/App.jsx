@@ -1414,6 +1414,7 @@ export default function App() {
 
             {/* ── Grid ── */}
             <GameGrid
+              key={currentLevel.id}
               grid={grid}
               onCellReveal={handleCellReveal}
               onDecoyTap={handleDecoyTap}
