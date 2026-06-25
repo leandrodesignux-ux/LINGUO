@@ -485,6 +485,7 @@ function gameReducer(state, action) {
         lastFeedback: null,
         solvedByButton: false,
         wrongSolveCount: 0,
+        rerollsUsed: 0,
       }
     }
 
