@@ -260,6 +260,64 @@ function SettingsPopover({ open, onClose, isMuted, onToggleMute, onShowTutorial,
   )
 }
 
+// ── Mode popover (logo dropdown) ──────────────────────────────────────────────
+function ModePopover({ open, onClose, dailyMode, onToggleDaily, duelMode, onToggleDuel, builderMode, onToggleBuilder }) {
+  const ref = useRef(null)
+
+  useEffect(() => {
+    if (!open) return
+    function handler(e) {
+      if (ref.current && !ref.current.contains(e.target)) onClose()
+    }
+    document.addEventListener('pointerdown', handler)
+    return () => document.removeEventListener('pointerdown', handler)
+  }, [open, onClose])
+
+  return (
+    <AnimatePresence>
+      {open && (
+        <motion.div
+          ref={ref}
+          className="absolute top-[calc(100%+6px)] left-0 z-50 min-w-[180px] py-1 rounded-xl border border-white/12 bg-[#1a1910] shadow-2xl shadow-black/60"
+          initial={{ opacity: 0, y: -6, scale: 0.96 }}
+          animate={{ opacity: 1, y: 0, scale: 1 }}
+          exit={{ opacity: 0, y: -4, scale: 0.96 }}
+          transition={{ duration: 0.14 }}
+        >
+          {/* Daily */}
+          <button
+            onClick={() => { onToggleDaily(); onClose(); }}
+            className={`w-full flex items-center gap-2.5 px-3.5 py-2.5 text-left text-[12px] font-semibold transition-colors ${dailyMode ? 'text-linguo-malibu bg-linguo-malibu/10' : 'text-linguo-fantasy/70 hover:text-linguo-fantasy hover:bg-white/5'}`}
+          >
+            <span className="text-base">🗓</span>
+            {dailyMode ? 'Exit Daily' : 'Daily'}
+          </button>
+
+          <div className="h-px mx-3 bg-white/8 my-0.5" />
+
+          {/* Grammar Duel */}
+          <button
+            onClick={() => { onToggleDuel(); onClose(); }}
+            className={`w-full flex items-center gap-2.5 px-3.5 py-2.5 text-left text-[12px] font-semibold transition-colors ${duelMode ? 'text-linguo-brightLavender bg-linguo-brightLavender/10' : 'text-linguo-fantasy/70 hover:text-linguo-fantasy hover:bg-white/5'}`}
+          >
+            <span className="text-base">⚔️</span>
+            {duelMode ? 'Exit Grammar Duel' : 'Grammar Duel'}
+          </button>
+
+          {/* Sentence Builder */}
+          <button
+            onClick={() => { onToggleBuilder(); onClose(); }}
+            className={`w-full flex items-center gap-2.5 px-3.5 py-2.5 text-left text-[12px] font-semibold transition-colors ${builderMode ? 'text-linguo-lightGold bg-linguo-lightGold/10' : 'text-linguo-fantasy/70 hover:text-linguo-fantasy hover:bg-white/5'}`}
+          >
+            <span className="text-base">🧩</span>
+            {builderMode ? 'Exit Sentence Builder' : 'Sentence Builder'}
+          </button>
+        </motion.div>
+      )}
+    </AnimatePresence>
+  )
+}
+
 // ── Header ────────────────────────────────────────────────────────────────────
 /**
  * Props (existing):
@@ -294,6 +352,9 @@ export default function Header({
 }) {
   const [settingsOpen, setSettingsOpen] = useState(false)
   const settingsBtnRef = useRef(null)
+
+  const [modesOpen, setModesOpen] = useState(false)
+  const logoRef = useRef(null)
 
   // Internal mute state mirrors prop so it still works if prop isn't wired yet
   const [mutedLocal, setMutedLocal] = useState(() => isMuted())
@@ -345,21 +406,29 @@ export default function Header({
         {/* ──── LEFT ZONE ──────────────────────────────────────────────────── */}
         <div className="flex items-center gap-1.5 flex-shrink-0">
 
-          {/* Logo */}
-          <span className="font-black tracking-widest text-base leading-none select-none bg-gradient-to-r from-linguo-blossomPink to-linguo-brightLavender bg-clip-text text-transparent whitespace-nowrap">
-            ✦ LINGUO
-          </span>
-
-          {/* Daily */}
-          <NavBtn
-            onClick={onToggleDaily}
-            title={dailyMode ? 'Exit daily mode' : "Play today's daily puzzle"}
-            active={dailyMode}
-            accentOn="bg-linguo-malibu/20 border-linguo-malibu/60 text-linguo-malibu"
-            accentOff="bg-white/5 border-white/15 text-linguo-fantasy/50 hover:border-linguo-malibu/50 hover:text-linguo-malibu"
-            icon="🗓"
-            label="Daily"
-          />
+          {/* Logo with mode dropdown */}
+          <div ref={logoRef} className="relative flex-shrink-0">
+            <button
+              onClick={() => setModesOpen((v) => !v)}
+              className="flex items-center gap-0.5 font-black tracking-widest text-base leading-none select-none bg-gradient-to-r from-linguo-blossomPink to-linguo-brightLavender bg-clip-text text-transparent focus:outline-none"
+              aria-haspopup="true"
+              aria-expanded={modesOpen}
+              title="Game modes"
+            >
+              <span>✦ LINGUO</span>
+              <span className={`text-[10px] transition-transform duration-150 ${modesOpen ? 'rotate-180' : ''}`}>▾</span>
+            </button>
+            <ModePopover
+              open={modesOpen}
+              onClose={() => setModesOpen(false)}
+              dailyMode={dailyMode}
+              onToggleDaily={onToggleDaily}
+              duelMode={duelMode}
+              onToggleDuel={onToggleDuel}
+              builderMode={builderMode}
+              onToggleBuilder={onToggleBuilder}
+            />
+          </div>
 
           {/* Challenges */}
           <NavBtn
@@ -370,30 +439,6 @@ export default function Header({
             accentOff="bg-white/5 border-white/15 text-linguo-fantasy/50 hover:border-linguo-teal/50 hover:text-linguo-teal"
             badge={completedChallengesCount}
             icon="🎯"
-          />
-
-          {/* Grammar Duel */}
-          <NavBtn
-            onClick={onToggleDuel}
-            title={duelMode ? 'Exit Grammar Duel' : 'Grammar Duel'}
-            active={duelMode}
-            aria-pressed={duelMode}
-            accentOn="bg-linguo-brightLavender/20 border-linguo-brightLavender/60 text-linguo-brightLavender"
-            accentOff="bg-white/5 border-white/15 text-linguo-fantasy/50 hover:border-linguo-brightLavender/50 hover:text-linguo-brightLavender"
-            icon="⚔️"
-            label="Duel"
-          />
-
-          {/* Sentence Builder */}
-          <NavBtn
-            onClick={onToggleBuilder}
-            title={builderMode ? 'Exit Sentence Builder' : 'Sentence Builder'}
-            active={builderMode}
-            aria-pressed={builderMode}
-            accentOn="bg-linguo-lightGold/20 border-linguo-lightGold/60 text-linguo-lightGold"
-            accentOff="bg-white/5 border-white/15 text-linguo-fantasy/50 hover:border-linguo-lightGold/50 hover:text-linguo-lightGold"
-            icon="🧩"
-            label="Build"
           />
 
           {/* Daily streak */}
