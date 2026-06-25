@@ -372,6 +372,30 @@ export default function Header({
             icon="🎯"
           />
 
+          {/* Grammar Duel */}
+          <NavBtn
+            onClick={onToggleDuel}
+            title={duelMode ? 'Exit Grammar Duel' : 'Grammar Duel'}
+            active={duelMode}
+            aria-pressed={duelMode}
+            accentOn="bg-linguo-brightLavender/20 border-linguo-brightLavender/60 text-linguo-brightLavender"
+            accentOff="bg-white/5 border-white/15 text-linguo-fantasy/50 hover:border-linguo-brightLavender/50 hover:text-linguo-brightLavender"
+            icon="⚔️"
+            label="Duel"
+          />
+
+          {/* Sentence Builder */}
+          <NavBtn
+            onClick={onToggleBuilder}
+            title={builderMode ? 'Exit Sentence Builder' : 'Sentence Builder'}
+            active={builderMode}
+            aria-pressed={builderMode}
+            accentOn="bg-linguo-lightGold/20 border-linguo-lightGold/60 text-linguo-lightGold"
+            accentOff="bg-white/5 border-white/15 text-linguo-fantasy/50 hover:border-linguo-lightGold/50 hover:text-linguo-lightGold"
+            icon="🧩"
+            label="Build"
+          />
+
           {/* Daily streak */}
           {dailyStreakCount >= 2 && (
             <span className="hidden sm:flex items-center gap-0.5 text-linguo-lightGold font-black text-[11px]">
