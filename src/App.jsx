@@ -1034,7 +1034,7 @@ export default function App() {
         {challengeToast && (
           <motion.div
             key={challengeToast}
-            className="fixed top-28 left-1/2 z-[60] flex items-center gap-2 px-5 py-2.5 rounded-2xl shadow-2xl shadow-black/60 pointer-events-none select-none"
+            className="fixed top-14 left-1/2 z-[60] flex items-center gap-2 px-5 py-2.5 rounded-2xl shadow-2xl shadow-black/60 pointer-events-none select-none"
             style={{ background: 'linear-gradient(135deg, #00917A, #40B8A6)', x: '-50%' }}
             initial={{ opacity: 0, y: -20, scale: 0.88 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
@@ -1054,7 +1054,7 @@ export default function App() {
         {eventToast && (
           <motion.div
             key="cake-toast"
-            className="fixed top-40 left-1/2 z-[60] flex items-center gap-2 px-5 py-2.5 rounded-2xl shadow-2xl shadow-black/60 pointer-events-none select-none"
+            className="fixed top-14 left-1/2 z-[60] flex items-center gap-2 px-5 py-2.5 rounded-2xl shadow-2xl shadow-black/60 pointer-events-none select-none"
             style={{ background: 'linear-gradient(135deg, #FFDA57, #F5C200)', x: '-50%' }}
             initial={{ opacity: 0, y: -20, scale: 0.88 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
@@ -1073,7 +1073,7 @@ export default function App() {
       <AnimatePresence>
         {infiniteActive && (
           <motion.div
-            className="fixed top-16 left-1/2 z-[35] flex items-center gap-2 px-4 py-1.5 rounded-b-2xl pointer-events-none select-none"
+            className="fixed top-14 left-1/2 z-[35] flex items-center gap-2 px-4 py-1.5 rounded-b-xl pointer-events-none select-none"
             style={{ background: 'linear-gradient(135deg,#FFDA57cc,#F5C200cc)', backdropFilter: 'blur(6px)', x: '-50%' }}
             initial={{ opacity: 0, y: -8 }}
             animate={{ opacity: 1, y: 0 }}
@@ -1303,7 +1303,7 @@ export default function App() {
       </AnimatePresence>
 
       {/* ── Main content ── */}
-      <main ref={mainRef} className="w-full max-w-md px-3 sm:px-4 pt-20 pb-10 flex flex-col items-center">
+      <main ref={mainRef} className="w-full max-w-md px-3 sm:px-4 pt-16 pb-10 flex flex-col items-center">
 
         {/* ── Daily mode banner ── */}
         {dailyMode && (

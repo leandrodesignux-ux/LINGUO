@@ -23,7 +23,7 @@ export default function LevelUpToast({ show, playerLevel, onDone }) {
         <motion.div
           key={playerLevel}
           className="
-            fixed top-16 left-1/2 z-[60]
+            fixed top-14 left-1/2 z-[60]
             flex items-center gap-2 px-5 py-2.5
             rounded-2xl shadow-2xl shadow-black/60
             pointer-events-none select-none
