@@ -45,7 +45,7 @@ import {
   computeDailyStreak,
 } from './data/progression.js'
 import { MAX_LIVES, loadLives, spendLife, hasInfiniteLives, getInfiniteRemainingMs } from './data/lives.js'
-import { loadCakeEvent, recordCakeLevelComplete, CAKE_TARGET, CAKE_EVENT_LABEL } from './data/events.js'
+import { loadCakeEvent, recordCakeLevelComplete, CAKE_EVENT_LABEL } from './data/events.js'
 import {
   loadCoins, addCoins, spendCoins,
   CHEST_COINS, COINS_PER_LEFTOVER_MOVE, CHALLENGE_COINS,
@@ -846,9 +846,9 @@ export default function App() {
       setLivesState(spendLife())
       recordFail(currentLevel.id)
       const assist = getAssistance(currentLevel.id)
-      dispatch({ type: A.RESET_GAME })
+      activeDispatch({ type: A.RESET_GAME })
       if (shouldAssist(currentLevel.id)) {
-        dispatch({ type: A.APPLY_DDA, extraMoves: assist.extraMoves, revealCount: assist.revealCount })
+        activeDispatch({ type: A.APPLY_DDA, extraMoves: assist.extraMoves, revealCount: assist.revealCount })
       }
     } else {
       setDailyMode(false)
