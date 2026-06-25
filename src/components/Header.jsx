@@ -170,7 +170,7 @@ function LivesChip({ lives, maxLives, nextLifeMs, infiniteRemainingMs }) {
 }
 
 // ── Settings popover ──────────────────────────────────────────────────────────
-function SettingsPopover({ open, onClose, isMuted, onToggleMute, onShowTutorial, onResetProgress, onShowMastery }) {
+function SettingsPopover({ open, onClose, isMuted, onToggleMute, onShowTutorial, onResetProgress, onShowMastery, onToggleDuel, onToggleBuilder, duelMode, builderMode }) {
   const ref = useRef(null)
 
   useEffect(() => {
@@ -211,6 +211,26 @@ function SettingsPopover({ open, onClose, isMuted, onToggleMute, onShowTutorial,
           >
             <span className="text-base">📊</span>
             Grammar progress
+          </button>
+
+          <div className="h-px mx-3 bg-white/8 my-0.5" />
+
+          {/* Grammar Duel */}
+          <button
+            onClick={() => { onToggleDuel(); onClose(); }}
+            className="w-full flex items-center gap-2.5 px-3.5 py-2.5 text-left text-[12px] font-semibold text-linguo-fantasy/70 hover:text-linguo-fantasy hover:bg-white/5 transition-colors"
+          >
+            <span className="text-base">⚔️</span>
+            {duelMode ? 'Exit Grammar Duel' : 'Grammar Duel'}
+          </button>
+
+          {/* Sentence Builder */}
+          <button
+            onClick={() => { onToggleBuilder(); onClose(); }}
+            className="w-full flex items-center gap-2.5 px-3.5 py-2.5 text-left text-[12px] font-semibold text-linguo-fantasy/70 hover:text-linguo-fantasy hover:bg-white/5 transition-colors"
+          >
+            <span className="text-base">🧩</span>
+            {builderMode ? 'Exit Sentence Builder' : 'Sentence Builder'}
           </button>
 
           <div className="h-px mx-3 bg-white/8 my-0.5" />
@@ -352,26 +372,6 @@ export default function Header({
             icon="🎯"
           />
 
-          {/* Duel mode */}
-          <NavBtn
-            onClick={onToggleDuel}
-            title={duelMode ? 'Exit Grammar Duel' : 'Grammar Duel — identify the correct form'}
-            active={duelMode}
-            accentOn="bg-linguo-lightCoral/20 border-linguo-lightCoral/60 text-linguo-lightCoral"
-            accentOff="bg-white/5 border-white/15 text-linguo-fantasy/50 hover:border-linguo-lightCoral/50 hover:text-linguo-lightCoral"
-            icon="⚔️"
-          />
-
-          {/* Sentence Builder mode */}
-          <NavBtn
-            onClick={onToggleBuilder}
-            title={builderMode ? 'Exit Sentence Builder' : 'Sentence Builder — arrange fragments in order'}
-            active={builderMode}
-            accentOn="bg-linguo-lightGold/20 border-linguo-lightGold/60 text-linguo-lightGold"
-            accentOff="bg-white/5 border-white/15 text-linguo-fantasy/50 hover:border-linguo-lightGold/50 hover:text-linguo-lightGold"
-            icon="🧩"
-          />
-
           {/* Daily streak */}
           {dailyStreakCount >= 2 && (
             <span className="hidden sm:flex items-center gap-0.5 text-linguo-lightGold font-black text-[11px]">
@@ -452,6 +452,10 @@ export default function Header({
               onShowTutorial={handleShowTutorial}
               onResetProgress={onResetProgress}
               onShowMastery={onShowMastery}
+              onToggleDuel={onToggleDuel}
+              onToggleBuilder={onToggleBuilder}
+              duelMode={duelMode}
+              builderMode={builderMode}
             />
           </div>
         </div>
