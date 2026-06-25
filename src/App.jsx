@@ -1142,6 +1142,7 @@ export default function App() {
           hintAvailable={hintAvailable}
           hintsLeft={hintsLeft}
           hint={currentLevel.hint}
+          source={currentLevel.source}
           grammarExplanation={currentLevel.grammarExplanation}
           onUseHint={handleUseHint}
           onBuyHint={handleBuyHint}
@@ -1333,12 +1334,6 @@ export default function App() {
 
         ) : (
           <>
-            {/* ── Level info ── */}
-            <div className="mb-2 text-center">
-              <p className="text-linguo-fantasy/40 text-xs uppercase tracking-widest mb-1">{currentLevel.source}</p>
-              <p className="text-linguo-fantasy/70 text-sm italic">"{currentLevel.hint}"</p>
-            </div>
-
             {/* ── Level timer ── */}
             {!levelComplete && !isGameOver && (
               <div className="w-full mb-2">

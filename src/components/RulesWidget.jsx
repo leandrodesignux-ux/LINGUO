@@ -170,7 +170,7 @@ function PaidHintButton({ onBuyHint, coins, hintCost }) {
 
 // ─── Shared panel content ─────────────────────────────────────────────────────
 
-function WidgetContent({ streak, hintAvailable, hintsLeft, hint, grammarExplanation, onUseHint, onBuyHint, coins, hintCost, cefr, category, activeColor }) {
+function WidgetContent({ streak, hintAvailable, hintsLeft, hint, source, grammarExplanation, onUseHint, onBuyHint, coins, hintCost, cefr, category, activeColor }) {
   const hintsExhausted = hintsLeft === 0
   const categoryLabel = CATEGORY_LABEL[category] ?? category
   const swatchColor   = SWATCH[activeColor]
@@ -185,6 +185,9 @@ function WidgetContent({ streak, hintAvailable, hintsLeft, hint, grammarExplanat
 
       {/* ── Always-visible: category label + CEFR badge + color pill + hint ── */}
       <div className="w-full rounded-xl bg-linguo-brightLavender/8 border border-linguo-brightLavender/20 px-2 py-2 flex flex-col gap-1.5">
+        {source && (
+          <p className="text-linguo-fantasy/30 text-[8px] uppercase tracking-widest leading-none">{source}</p>
+        )}
         {categoryLabel && (
           <p className="text-linguo-fantasy font-black text-[11px] leading-tight">
             {categoryLabel}
@@ -247,9 +250,9 @@ function WidgetContent({ streak, hintAvailable, hintsLeft, hint, grammarExplanat
 
 // ─── RulesWidget ─────────────────────────────────────────────────────────────
 
-export default function RulesWidget({ streak, hintAvailable, hintsLeft, hint, grammarExplanation, onUseHint, onBuyHint, coins, hintCost, cefr, category, activeColor }) {
+export default function RulesWidget({ streak, hintAvailable, hintsLeft, hint, source, grammarExplanation, onUseHint, onBuyHint, coins, hintCost, cefr, category, activeColor }) {
   const [mobileOpen, setMobileOpen] = useState(false)
-  const contentProps = { streak, hintAvailable, hintsLeft, hint, grammarExplanation, onUseHint, onBuyHint, coins, hintCost, cefr, category, activeColor }
+  const contentProps = { streak, hintAvailable, hintsLeft, hint, source, grammarExplanation, onUseHint, onBuyHint, coins, hintCost, cefr, category, activeColor }
 
   return (
     <>
