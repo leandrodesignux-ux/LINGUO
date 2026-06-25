@@ -270,23 +270,35 @@ export default function RulesWidget({ streak, hintAvailable, hintsLeft, hint, so
       </aside>
 
       {/* ── Mobile: collapsed pill button (below sm) ── */}
-      <div className="sm:hidden fixed top-16 right-3 z-30">
-        <button
-          onClick={() => setMobileOpen((o) => !o)}
-          className="
-            flex items-center gap-1.5 px-3 py-1.5
-            bg-linguo-smokyBlack border border-linguo-brightLavender/40
-            rounded-full text-xs font-bold text-linguo-blossomPink
-            shadow-lg shadow-black/30
-            focus:outline-none focus:ring-2 focus:ring-linguo-brightLavender
-          "
-          aria-label={mobileOpen ? 'Close Lex panel' : 'Open Lex panel'}
-          aria-expanded={mobileOpen}
-        >
-          <span>🔮</span>
-          <span>LEX</span>
-          <span className="text-linguo-fantasy/40">{mobileOpen ? '▲' : '▼'}</span>
-        </button>
+      <div className="sm:hidden fixed top-14 right-2 z-30">
+        <div className="flex items-center gap-0 rounded-full overflow-hidden border border-linguo-brightLavender/30 bg-linguo-smokyBlack shadow-lg shadow-black/30">
+          {/* Color hint — always visible */}
+          <div className="flex items-center gap-1.5 px-3 py-1.5 pointer-events-none select-none">
+            {activeColor && (
+              <>
+                <div style={{
+                  width: 8, height: 8, borderRadius: '50%', flexShrink: 0,
+                  background: SWATCH[activeColor],
+                  boxShadow: `0 0 4px 1px ${SWATCH[activeColor]}88`,
+                }} />
+                <span className="text-[10px] font-black uppercase tracking-wider" style={{ color: SWATCH[activeColor] }}>
+                  {COLOR_LABEL[activeColor]}
+                </span>
+              </>
+            )}
+          </div>
+          {/* Divider */}
+          <div className="w-px h-4 bg-white/15" />
+          {/* LEX toggle */}
+          <button
+            onClick={() => setMobileOpen((o) => !o)}
+            className="flex items-center gap-1 px-2.5 py-1.5 text-linguo-blossomPink focus:outline-none"
+            aria-label={mobileOpen ? 'Close Lex panel' : 'Open Lex panel'}
+          >
+            <span className="text-[11px] font-bold">LEX</span>
+            <span className="text-linguo-fantasy/40 text-[9px]">{mobileOpen ? '▲' : '▼'}</span>
+          </button>
+        </div>
 
         {/* Dropdown panel */}
         {mobileOpen && (
