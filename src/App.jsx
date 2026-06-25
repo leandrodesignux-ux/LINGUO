@@ -875,7 +875,7 @@ export default function App() {
         chest = 'bronze'
       } else if (strikes === 0 && hintsUsedThisLevel === 0) {
         chest = 'gold'
-      } else if (strikes <= 1 || hintsUsedThisLevel <= 1) {
+      } else if (strikes <= 1 && hintsUsedThisLevel <= 1) {
         chest = 'silver'
       } else {
         chest = 'bronze'
@@ -1310,7 +1310,7 @@ export default function App() {
         {/* ── Game over — loss-aversion screen ── */}
         {/* Ternary evaluated in same render as SOLVE_ATTEMPT dispatch; React
             batches so PhraseBoard disappears atomically when movesLeft hits 0. */}
-        {movesLeft === 0 && !levelComplete ? (
+        {isGameOver ? (
           <GameOverScreen
             streak={streak}
             coins={coins}
