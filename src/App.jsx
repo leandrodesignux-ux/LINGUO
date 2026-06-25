@@ -352,12 +352,11 @@ function gameReducer(state, action) {
       // Wrong guess: break streak and increment wrongSolveCount (forces bronze chest).
       // Do NOT subtract movesLeft — the tap budget must stay intact so the player
       // can still complete the level by tapping even after a failed solve attempt.
-      const prevCount = state.lastFeedback?.wrongCount ?? 0
       return {
         ...state,
         streak: 0,
         wrongSolveCount: state.wrongSolveCount + 1,
-        lastFeedback: { type: 'solve-wrong', wrongCount: prevCount + 1 },
+        lastFeedback: { type: 'solve-wrong', wrongCount: state.wrongSolveCount + 1 },
       }
     }
 
@@ -433,10 +432,33 @@ function gameReducer(state, action) {
           ),
         }
       }
+      let newGrid = state.grid
+      if (revealCount > 0) {
+        const revealedIndices = new Set(
+          hp.slots.filter((s) => s.revealed && s.char !== ' ').map((s) => s.index)
+        )
+        const prevRevealedIndices = new Set(
+          state.hiddenPhrase.slots.filter((s) => s.revealed && s.char !== ' ').map((s) => s.index)
+        )
+        const newlyRevealed = [...revealedIndices].filter((i) => !prevRevealedIndices.has(i))
+        if (newlyRevealed.length > 0) {
+          const nonActiveColor = COLORS.filter((c) => c !== state.activeColor)[0]
+          newGrid = state.grid.map((row) =>
+            row.map((cell) => {
+              if (cell.phraseIndex !== null && newlyRevealed.includes(cell.phraseIndex)) {
+                const decoyChar = pickDecoyChar(state.currentLevel.phrase, (cell.letter ?? '').toUpperCase())
+                return { ...cell, isDecoy: true, phraseIndex: null, letter: decoyChar, decoyChar, color: nonActiveColor, revealed: false }
+              }
+              return cell
+            })
+          )
+        }
+      }
       return {
         ...state,
         movesLeft: state.movesLeft + extraMoves,
         hiddenPhrase: hp,
+        grid: newGrid,
       }
     }
 
