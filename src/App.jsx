@@ -814,8 +814,7 @@ export default function App() {
     if (s3Target && newStreak === s3Target) trackChallenge('streak3')
   }
   function handleSolveAttempt(guess) {
-    const match = guess.trim().toLowerCase().replace(/\s+/g, ' ') ===
-      activeState.currentLevel.phrase.trim().toLowerCase().replace(/\s+/g, ' ')
+    const match = normalizePhrase(guess) === normalizePhrase(activeState.currentLevel.phrase)
     // Was the board already fully revealed by chains alone before this Solve?
     const notYetComplete = !activeState.hiddenPhrase.slots
       .filter((s) => s.char !== ' ')
